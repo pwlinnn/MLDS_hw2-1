@@ -31,7 +31,7 @@ class CustomLoss(nn.Module):
 
         self.loss = self.loss_fn(pred_cat, gt_cat)
         self.avg_loss = self.loss/batch_size
-        return self.avg_loss
+        return self.loss
             
 if __name__ == '__main__':
     from torch.autograd import Variable

@@ -15,6 +15,7 @@ def main():
     training_label = './training_label.json'
     testing_avi_feats = './testing_data/feat'
     testing_label = './testing_label.json'
+    
     print('start building dictionary')
     dictionary = Vocabulary(PATH=training_label, min_cnt=5)
     print('end building dictionary')
@@ -42,15 +43,21 @@ def main():
     trainer = Trainer(model=model, train_dataloader=train_dataloader, test_dataloader=test_dataloader, dictionary=dictionary)
 
     s = time.time()
+    # test save
+    torch.save(model.state_dict(), "{}/{}.pt".format(MDL_OUTDIR, 0))
+    print('Saved mdl sucessfully!')
 
     for epoch in range(EPOCH):
         print('epoch: {}'.format(epoch))
         trainer.train()
         trainer.eval()
+        if (epoch+1)%25==0:
+            torch.save(model.state_dict(), "{}/{}.pt".format(MDL_OUTDIR, epoch+1))
+            print('model {} saved!'.format(epoch+1))
 
     e = time.time()
 
-    torch.save(model, "{}/{}.h5".format(MDL_OUTDIR, 'test'))
+    #torch.save(model, "{}/{}.h5".format(MDL_OUTDIR, 'test'))
 
     print("Finished training {}  Time elapsed: {: .3f} seconds. \n".format('test', e-s))
 if __name__ == '__main__':
